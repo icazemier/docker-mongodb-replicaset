@@ -1,0 +1,6 @@
+# Docker shizzls
+**/data
+
+.DS_Store
+
+node_modules

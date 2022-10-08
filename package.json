@@ -1,0 +1,22 @@
+{
+  "name": "@icazemier/docker-mongodb-replicaset",
+  "version": "1.0.0",
+  "description": "Test replicaset",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node ./src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/icazemier/docker-mongodb-replicaset.git"
+  },
+  "author": "",
+  "license": "NOLICENSE",
+  "bugs": {
+    "url": "https://github.com/icazemier/docker-mongodb-replicaset/issues"
+  },
+  "homepage": "https://github.com/icazemier/docker-mongodb-replicaset#readme",
+  "dependencies": {
+    "mongodb": "^4.10.0"
+  }
+}
