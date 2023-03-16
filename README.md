@@ -1,5 +1,5 @@
+MongoDB 6.0.5 Replicaset for local development on MacOS
 # Setup
-
 ## Prequisites
 
 * Installed [Docker Desktop](https://www.docker.com/products/docker-desktop)
@@ -12,7 +12,7 @@
 
 ## SETUP Mongo Replica Set
 
-(This needs to be run once, after setup one can just use e.g. `docker-compose up -d`)
+__(This needs to be run ===> once <===, after setup one can just use e.g. `docker-compose up -d`)__
 
 * Be sure Docker is started (See installed Applications)
 * Be sure `./setup.sh` is executable by executing: `chmod +x ./setup.sh`
@@ -26,17 +26,13 @@
 
 * Execute: `docker-compose stop`
 
-### Status
-
-```bash
-docker exec mongo1 bash -c 'mongosh --eval "rs.status();"'
-```
-
 ## Connect with Mongo Shell
 
 * Open a new connection with e.g: `mongosh mongodb://127.0.0.1:27017`
 
 ## Connect with MongoDB Compass
+
+__👉🏻 NOTE: Connection string : `mongodb://localhost:27017/?readPreference=primary&directConnection=true&ssl=false`👈🏻__
 
 <img src="./readme-assets/compass.png"/>
 
