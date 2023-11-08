@@ -1,4 +1,4 @@
-MongoDB 6.0.5 Replicaset for local development on MacOS
+MongoDB Replicaset for local development on MacOS
 # Setup
 ## Prequisites
 
@@ -15,6 +15,7 @@ MongoDB 6.0.5 Replicaset for local development on MacOS
 __(This needs to be run ===> once <===, after setup one can just use e.g. `docker-compose up -d`)__
 
 * Be sure Docker is started (See installed Applications)
+* Review the environment variable currently set [.env](./.env) and change when needed
 * Be sure `./setup.sh` is executable by executing: `chmod +x ./setup.sh`
 * Execute: `./setup.sh`
 * Wait for it to finish setting up
