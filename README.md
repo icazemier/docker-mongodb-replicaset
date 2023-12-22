@@ -16,9 +16,16 @@ __(This needs to be run ===> once <===, after setup one can just use e.g. `docke
 
 * Be sure Docker is started (See installed Applications)
 * Review the environment variable currently set [.env](./.env) and change when needed
+
+### MacOS / Linux:
 * Be sure `./setup.sh` is executable by executing: `chmod +x ./setup.sh`
 * Execute: `./setup.sh`
 * Wait for it to finish setting up
+
+### Windows
+
+* Start CMD Prompt
+* Execute `setup.bat`
 
 ## Start Mongo Replica Set
 
