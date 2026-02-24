@@ -21,7 +21,7 @@ async function run() {
         const result = await foods.insertMany(docs, options);
         console.log(`${result.insertedCount} documents were inserted`);
 
-        // Transactionio
+        // Transaction
         const session = client.startSession();
         const transactionOptions = {
             readPreference: 'primary',
