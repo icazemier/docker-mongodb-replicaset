@@ -1,80 +1,18 @@
 services:
-  mongo1:
-    container_name: mongo1
-    image: mongo:${MONGODB_VERSION}
-    command: ["--replSet", "rs0", "--bind_ip_all"]
+  mongodb:
+    container_name: mongodb
+    image: mongodb/mongodb-atlas-local
+    environment:
+      - DO_NOT_TRACK=1
     volumes:
-      - mongo1-data:/data/db
-    networks:
-      - mongo-network
+      - mongodb-data:/data/db
+      - mongodb-config:/data/configdb
+      - mongodb-mongot:/data/mongot
     ports:
       - 27017:27017
     restart: always
-    healthcheck:
-      test: mongosh --eval "db.runCommand('ping')" --quiet
-      interval: 5s
-      timeout: 5s
-      retries: 10
-      start_period: 10s
-
-  mongo2:
-    container_name: mongo2
-    image: mongo:${MONGODB_VERSION}
-    command: ["--replSet", "rs0", "--bind_ip_all"]
-    volumes:
-      - mongo2-data:/data/db
-    networks:
-      - mongo-network
-    ports:
-      - 27018:27017
-    restart: always
-    healthcheck:
-      test: mongosh --eval "db.runCommand('ping')" --quiet
-      interval: 5s
-      timeout: 5s
-      retries: 10
-      start_period: 10s
-
-  mongo3:
-    container_name: mongo3
-    image: mongo:${MONGODB_VERSION}
-    command: ["--replSet", "rs0", "--bind_ip_all"]
-    volumes:
-      - mongo3-data:/data/db
-    networks:
-      - mongo-network
-    ports:
-      - 27019:27017
-    restart: always
-    healthcheck:
-      test: mongosh --eval "db.runCommand('ping')" --quiet
-      interval: 5s
-      timeout: 5s
-      retries: 10
-      start_period: 10s
-
-  mongo-init:
-    container_name: mongo-init
-    image: mongo:${MONGODB_VERSION}
-    volumes:
-      - ./scripts/rs-init.sh:/scripts/rs-init.sh:ro
-    networks:
-      - mongo-network
-    depends_on:
-      mongo1:
-        condition: service_healthy
-      mongo2:
-        condition: service_healthy
-      mongo3:
-        condition: service_healthy
-    restart: "no"
-    entrypoint: ["/bin/sh", "/scripts/rs-init.sh"]
-
-networks:
-  mongo-network:
-    driver: bridge
 
 volumes:
-  mongo1-data:
-  mongo2-data:
-  mongo3-data:
+  mongodb-data:
+  mongodb-config:
+  mongodb-mongot:

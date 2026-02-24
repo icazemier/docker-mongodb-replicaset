@@ -1,5 +1,7 @@
-MongoDB Replicaset for local development
+MongoDB Atlas Local for local development
+
 # Setup
+
 ## Prerequisites
 
 * Installed [Docker Desktop](https://www.docker.com/products/docker-desktop)
@@ -10,29 +12,27 @@ MongoDB Replicaset for local development
     * Execute: `brew install mongosh` (Mongo Shell)
     * Execute: `brew install mongodb-database-tools` (Database Tools)
 
-## SETUP Mongo Replica Set
+## SETUP MongoDB Atlas Local
 
 __(This needs to be run ===> once <===, after setup one can just use `docker compose up -d`)__
 
 * Be sure Docker is started (See installed Applications)
-* Review the environment variable currently set [.env](./.env) and change when needed
-* **If upgrading from an older MongoDB version**: see [Upgrading](#upgrading) below
 
 ### macOS / Linux:
 * Be sure `./setup.sh` is executable by executing: `chmod +x ./setup.sh`
 * Execute: `./setup.sh`
-* Wait for it to finish setting up (the replica set initializes automatically via healthchecks)
+* Wait for the container to become healthy (the replica set initializes automatically)
 
 ### Windows
 
 * Start CMD Prompt
 * Execute `setup.bat`
 
-## Start Mongo Replica Set
+## Start MongoDB
 
 * Execute `docker compose up -d`
 
-## Stop Mongo Replica Set
+## Stop MongoDB
 
 * Execute: `docker compose stop`
 
@@ -53,14 +53,23 @@ __Connection string : `mongodb://localhost:27017/?readPreference=primary&directC
 1. install dependencies/packages: `npm i`
 1. Run test: `npm run start`
 
+## Features
 
-# Upgrading
+This setup uses [mongodb-atlas-local](https://www.mongodb.com/docs/atlas/cli/current/atlas-cli-deploy-docker/) which provides:
 
-> **WARNING**: MongoDB does **not** support reading data files across major versions. If you are upgrading from an older MongoDB version (e.g. 6.0 to 8.0), your existing data will **not** be accessible by simply changing the version number. You must migrate your data using `mongodump` / `mongorestore`.
+- **Replica set** — transactions and change streams work out of the box
+- **Atlas Search** — full-text search indexes on your local data
+- **Vector Search** — vector similarity search for AI/ML workloads
+
+No Atlas subscription required.
+
+# Migrating from the 3-node replica set
+
+> **WARNING**: If you are upgrading from the previous 3-node `mongo:8.0` replica set setup, your existing data must be migrated using `mongodump` / `mongorestore`.
 
 ## Migration steps
 
-1. **While still on the old version**, dump your data:
+1. **While still on the old setup**, dump your data:
    ```sh
    # Start the old containers if not running
    docker compose up -d
@@ -75,15 +84,15 @@ __Connection string : `mongodb://localhost:27017/?readPreference=primary&directC
    docker compose down -v
    ```
 
-3. **Update** `.env` to the new MongoDB version and start the new cluster:
+3. **Update** to the new `docker-compose.yml` (this repo) and start:
    ```sh
    docker compose up -d
    ```
 
-4. **Restore** the data into the new cluster:
+4. **Restore** the data into the new container:
    ```sh
-   docker cp ./dump-migration mongo1:/dump
-   docker exec mongo1 mongorestore --drop /dump
+   docker cp ./dump-migration mongodb:/dump
+   docker exec mongodb mongorestore --drop /dump
    ```
 
 5. **Clean up** the migration dump:
@@ -93,5 +102,6 @@ __Connection string : `mongodb://localhost:27017/?readPreference=primary&directC
 
 # Resources
 
+- [MongoDB Atlas Local Docker](https://www.mongodb.com/docs/atlas/cli/current/atlas-cli-deploy-docker/)
 - [The MongoDB Homebrew Tap](https://github.com/mongodb/homebrew-brew)
-- [MongoDB Docker Hub](https://hub.docker.com/_/mongo)
+- [MongoDB Docker Hub](https://hub.docker.com/r/mongodb/mongodb-atlas-local)
