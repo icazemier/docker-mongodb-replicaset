@@ -1,106 +1,88 @@
-MongoDB Atlas Local for local development
+# MongoDB Atlas Local for local development
 
-# Setup
+A single-container local MongoDB setup with replica set, Atlas Search, and Vector Search — no Atlas subscription required.
 
 ## Prerequisites
 
-* Installed [Docker Desktop](https://www.docker.com/products/docker-desktop)
-* Installed [Mongo Compass](https://www.mongodb.com/download-center/compass?tck=docs_compass)
-* Installed [HomeBrew](https://brew.sh/) (macOS/Linux)
-* Installing only the Shell or the Database Tools:
-    * Execute: `brew tap mongodb/brew`
-    * Execute: `brew install mongosh` (Mongo Shell)
-    * Execute: `brew install mongodb-database-tools` (Database Tools)
+* [Docker Desktop](https://www.docker.com/products/docker-desktop)
+* [MongoDB Compass](https://www.mongodb.com/download-center/compass?tck=docs_compass) (optional, for a GUI)
 
-## SETUP MongoDB Atlas Local
+## Usage
 
-__(This needs to be run ===> once <===, after setup one can just use `docker compose up -d`)__
+```sh
+# Start
+docker compose up -d
 
-* Be sure Docker is started (See installed Applications)
+# Stop
+docker compose stop
+```
 
-### macOS / Linux:
-* Be sure `./setup.sh` is executable by executing: `chmod +x ./setup.sh`
-* Execute: `./setup.sh`
-* Wait for the container to become healthy (the replica set initializes automatically)
+The container auto-initializes a replica set, so transactions and change streams work out of the box.
 
-### Windows
+## Connecting
 
-* Start CMD Prompt
-* Execute `setup.bat`
+**Mongo Shell:**
+```sh
+mongosh mongodb://127.0.0.1:27017
+```
 
-## Start MongoDB
-
-* Execute `docker compose up -d`
-
-## Stop MongoDB
-
-* Execute: `docker compose stop`
-
-## Connect with Mongo Shell
-
-* Open a new connection with e.g: `mongosh mongodb://127.0.0.1:27017`
-
-## Connect with MongoDB Compass
-
-__Connection string : `mongodb://localhost:27017/?readPreference=primary&directConnection=true&ssl=false`__
+**MongoDB Compass:**
+```
+mongodb://localhost:27017/?readPreference=primary&directConnection=true&ssl=false
+```
 
 <img src="./readme-assets/compass.png"/>
 
-## Run a Node.js program to test
-
-(Ensure Node.js is installed)
-
-1. install dependencies/packages: `npm i`
-1. Run test: `npm run start`
-
 ## Features
 
-This setup uses [mongodb-atlas-local](https://www.mongodb.com/docs/atlas/cli/current/atlas-cli-deploy-docker/) which provides:
+This setup uses [mongodb/mongodb-atlas-local](https://www.mongodb.com/docs/atlas/cli/current/atlas-cli-deploy-docker/) which provides:
 
-- **Replica set** — transactions and change streams work out of the box
+- **Replica set** — transactions and change streams
 - **Atlas Search** — full-text search indexes on your local data
 - **Vector Search** — vector similarity search for AI/ML workloads
 
-No Atlas subscription required.
+## Test with Node.js
 
-# Migrating from the 3-node replica set
+```sh
+npm install
+npm start
+```
 
-> **WARNING**: If you are upgrading from the previous 3-node `mongo:8.0` replica set setup, your existing data must be migrated using `mongodump` / `mongorestore`.
+This runs a small script that inserts documents and performs a transaction to verify everything works.
 
-## Migration steps
+## Migrating from the 3-node replica set
+
+If you were previously using the 3-node `mongo:8.0` replica set setup from this repo, your data needs to be migrated with `mongodump` / `mongorestore`.
 
 1. **While still on the old setup**, dump your data:
    ```sh
-   # Start the old containers if not running
    docker compose up -d
-
-   # Dump all databases from the primary node
    docker exec mongo1 mongodump --out /dump
    docker cp mongo1:/dump ./dump-migration
    ```
 
-2. **Stop and remove** the old containers and volumes:
+2. **Stop and remove** old containers and volumes:
    ```sh
    docker compose down -v
    ```
 
-3. **Update** to the new `docker-compose.yml` (this repo) and start:
+3. **Pull the latest version** of this repo and start the new container:
    ```sh
    docker compose up -d
    ```
 
-4. **Restore** the data into the new container:
+4. **Restore** into the new container:
    ```sh
    docker cp ./dump-migration mongodb:/dump
    docker exec mongodb mongorestore --drop /dump
    ```
 
-5. **Clean up** the migration dump:
+5. **Clean up:**
    ```sh
    rm -rf ./dump-migration
    ```
 
-# Resources
+## Resources
 
 - [MongoDB Atlas Local Docker](https://www.mongodb.com/docs/atlas/cli/current/atlas-cli-deploy-docker/)
 - [The MongoDB Homebrew Tap](https://github.com/mongodb/homebrew-brew)
