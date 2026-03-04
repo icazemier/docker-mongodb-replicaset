@@ -1,6 +1,7 @@
 services:
   mongodb:
     container_name: mongodb
+    hostname: mongodb
     image: mongodb/mongodb-atlas-local
     environment:
       - DO_NOT_TRACK=1
