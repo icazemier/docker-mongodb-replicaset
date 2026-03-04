@@ -5,14 +5,9 @@ services:
     environment:
       - DO_NOT_TRACK=1
     volumes:
-      - mongodb-data:/data/db
-      - mongodb-config:/data/configdb
-      - mongodb-mongot:/data/mongot
+      - ./data/db:/data/db
+      - ./data/configdb:/data/configdb
+      - ./data/mongot:/data/mongot
     ports:
       - 27017:27017
     restart: always
-
-volumes:
-  mongodb-data:
-  mongodb-config:
-  mongodb-mongot:
