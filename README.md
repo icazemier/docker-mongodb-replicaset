@@ -50,38 +50,6 @@ npm start
 
 This runs a small script that inserts documents and performs a transaction to verify everything works.
 
-## Migrating from the 3-node replica set
-
-If you were previously using the 3-node `mongo:8.0` replica set setup from this repo, your data needs to be migrated with `mongodump` / `mongorestore`.
-
-1. **While still on the old setup**, dump your data:
-   ```sh
-   docker compose up -d
-   docker exec mongo1 mongodump --out /dump
-   docker cp mongo1:/dump ./dump-migration
-   ```
-
-2. **Stop and remove** old containers and volumes:
-   ```sh
-   docker compose down -v
-   ```
-
-3. **Pull the latest version** of this repo and start the new container:
-   ```sh
-   docker compose up -d
-   ```
-
-4. **Restore** into the new container:
-   ```sh
-   docker cp ./dump-migration mongodb:/dump
-   docker exec mongodb mongorestore --drop /dump
-   ```
-
-5. **Clean up:**
-   ```sh
-   rm -rf ./dump-migration
-   ```
-
 ## Resources
 
 - [MongoDB Atlas Local Docker](https://www.mongodb.com/docs/atlas/cli/current/atlas-cli-deploy-docker/)
