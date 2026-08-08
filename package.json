@@ -17,6 +17,6 @@
   },
   "homepage": "https://github.com/icazemier/docker-mongodb-replicaset#readme",
   "dependencies": {
-    "mongodb": "^6.0.0"
+    "mongodb": "^7.5.0"
   }
 }
